@@ -12,7 +12,6 @@ export default function FileUpload() {
   const [error, setError] = useState<string | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [summary, setSummary] = useState<string | null>(null)
-  const [useMockApi, setUseMockApi] = useState(false)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -54,8 +53,8 @@ export default function FileUpload() {
             throw new Error("Failed to read file")
           }
 
-          // Use either the real API or the mock API
-          const apiEndpoint = useMockApi ? "/api/summarize-mock" : "/api/summarize"
+          // Always use the real API endpoint
+          const apiEndpoint = "/api/summarize"
 
           // Send the base64 encoded file instead of FormData
           const response = await fetch(apiEndpoint, {
@@ -148,19 +147,6 @@ export default function FileUpload() {
               <span>{uploadStatus}</span>
             </div>
           )}
-
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="useMockApi"
-              checked={useMockApi}
-              onChange={(e) => setUseMockApi(e.target.checked)}
-              className="rounded text-green-600 focus:ring-green-500"
-            />
-            <label htmlFor="useMockApi" className="text-sm text-gray-600">
-              Use mock API (for testing without OpenAI)
-            </label>
-          </div>
 
           <button
             type="submit"
